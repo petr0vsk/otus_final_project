@@ -1,4 +1,5 @@
 from flask import Blueprint
+from author.models import Author
 
 author_app = Blueprint('author_app', __name__)
 
