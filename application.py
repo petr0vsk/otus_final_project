@@ -18,10 +18,15 @@ def create_app(**config_overrides):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-    # выделям блог в blueprints
+    # blueprints ------
+    # выделям собственно  блог
     from blog.views import blog_app
+    # выделим модуль авторизации для авторов
+    from author.views import author_app
+
 
     # регистрируем blueprints
     app.register_blueprint(blog_app)
+    app.register_blueprint(author_app)
 
     return app
