@@ -1,19 +1,13 @@
+{% from "_formhelpers.html" import render_field %}
 <form method="POST" action="{{ url_for('author_app.register')}}" role="form">
-<div>
     {{ form.hidden_tag() }}
-</div>
-<div>
-    {{ form.full_name.label }}{{ form.full_name }}
-</div>
-<div>
-    {{ form.email.label }}{{ form.email }}
-</div>
-    {{ form.password.label }}{{ form.password }}
-</div>
-<div>
-    {{ form.confirm.label }}{{ form.confirm }}
-</div>
-<div>
+
+    {{ render_field(form.full_name, class='form-control') }}
+    {{ render_field(form.email, class='form-control') }}
+    {{ render_field(form.password, class='form-control') }}
+    {{ render_field(form.confirm, class='form-control') }}
+
+    
     <input type="submit" value = "Register">
 </div>
   </form>
