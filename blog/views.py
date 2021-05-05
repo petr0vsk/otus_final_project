@@ -1,7 +1,7 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 blog_app = Blueprint('blog_app', __name__)
 
 @blog_app.route('/')
 def index():
-    return 'Test Page for OTUS BLOG'
+    return render_template('base.html')
