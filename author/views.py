@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect, session, url_for 
 from werkzeug.security import generate_password_hash
 
 from author.models import Author
@@ -29,6 +29,10 @@ def login():
     error = None
 
     if form.validate_on_submit():
-        return 'Logged in'
+        #return 'Logged in'
+        author = Author.query.filter_by(email = form.email.data).first()
+        session['id'] = author.id
+        session['full_name'] = author.full_name
+        return redirect(url_for('blog_app.index')) 
 
     return render_template('author/login.html', form=form, error=error)      
