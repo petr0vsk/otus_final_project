@@ -2,6 +2,8 @@
 
 {% block title %}Регистрация авторов {% endblock %}
 
+{% block nav %}{% include 'navbar.html' %}{% endblock %}
+
 {% block content %}
 
 <div class="row">
@@ -18,7 +20,7 @@
     {{ render_field(form.password, class='form-control') }}
     {{ render_field(form.confirm, class='form-control') }}
 
-    <button type="submit" class="btn btn-primary">Register</button>
+    <button type="submit" class="btn btn-primary">Зарегестрироваться</button>
 
   </form>
 

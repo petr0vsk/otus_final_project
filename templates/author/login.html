@@ -1,9 +1,14 @@
 {% extends "base.html" %}
+
 {% block title %} Author Login {% endblock %}
+
+{% block nav %}{% include 'navbar.html' %}{% endblock %}
+
 {% block content %}
 
 <div class="row">
     <div class="offset-md-2 col-md-8">
+        {% include  '_flashmessages.html' %}
         <h4> Вход авторов форума</h4>
         {% from "_formhelpers.html" import render_field %}
         <form method="POST" action="{{ url_for('author_app.login')}}">
@@ -13,7 +18,7 @@
             {{ render_field(form.email, class='form-control') }}
             {{ render_field(form.password, class='form-control') }}
 
-            <button type="submit" class="btn btn-primary">Register</button>
+            <button type="submit" class="btn btn-primary">Войти</button>
 
         </form>
     </div>

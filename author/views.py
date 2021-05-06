@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, session, url_for 
+from flask import Blueprint, render_template, redirect, session, url_for, flash 
 from werkzeug.security import generate_password_hash
 
 from author.models import Author
@@ -19,7 +19,8 @@ def register():
         )
         db.session.add(author)
         db.session.commit()
-        return f'Author ID: {author.id}'
+        flash('Подзравляем, Вы зарегестрировались! Можете войти на форум.')
+        return redirect(url_for('author_app.login'))
     return render_template('author/register.html', form = form)
     
 
@@ -41,5 +42,6 @@ def login():
 def logout():
     session.pop('id')
     session.pop('full_name')
-    return redirect(url_for('.login') )
+    flash('Вы покинули форум. До новых встречь!')
+    return redirect(url_for('author_app.login'))
 
