@@ -2,12 +2,12 @@ from flask import Blueprint, render_template
 from werkzeug.security import generate_password_hash
 
 from author.models import Author
-from author.forms import RegisterForm
+from author.forms import RegisterForm, LoginForm
 from application import db
 
 author_app = Blueprint('author_app', __name__)
 
-@author_app.route('/register', methods=['GET', 'POST'])
+@author_app.route('/register', methods=['GET', 'POST']) # регистрация
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
@@ -22,3 +22,13 @@ def register():
         return f'Author ID: {author.id}'
     return render_template('author/register.html', form = form)
     
+
+@author_app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    error = None
+
+    if form.validate_on_submit():
+        return 'Logged in'
+
+    return render_template('author/login.html', form=form, error=error)      
