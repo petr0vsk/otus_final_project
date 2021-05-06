@@ -19,7 +19,7 @@ def create_app(**config_overrides):
     migrate = Migrate(app, db)
 
     # blueprints ------
-    # выделям собственно  блог
+    # выделяем собственно  блог
     from blog.views import blog_app
     # выделим модуль авторизации для авторов
     from author.views import author_app
