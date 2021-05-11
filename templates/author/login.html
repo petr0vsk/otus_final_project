@@ -10,7 +10,9 @@
     <div class="offset-md-2 col-md-8">
         {% include  '_flashmessages.html' %}
         <h4> Вход авторов форума</h4>
+
         {% from "_formhelpers.html" import render_field %}
+        
         <form method="POST" action="{{ url_for('author_app.login')}}">
 
             {{ form.hidden_tag() }}

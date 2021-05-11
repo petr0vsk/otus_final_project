@@ -1,8 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, TextAreaField, SelectField, \
-    FileField
+from wtforms import validators, StringField, TextAreaField, SelectField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from flask_wtf.file import FileAllowed
 
 from blog.models import Category
 
@@ -10,14 +8,16 @@ def categories():
     return Category.query
 
 class PostForm(FlaskForm):
-    image = FileField('Image', validators=[
-        FileAllowed(['jpg', 'png'], 'We only accept JPG or PNG images')
-    ])
-    title = StringField('Title', [
+    #----- пока не понятно как и откуда подгружать картинку  в html---
+    #image = FileField('Image', validators=[
+    #    FileAllowed(['jpg', 'png'], 'We only accept JPG or PNG images')
+    #])
+    #------------- расскоментировать после решения  ----------------------------
+    title = StringField('Название', [
             validators.InputRequired(),
             validators.Length(max=80)
         ])
-    body = TextAreaField('Content', validators=[validators.InputRequired()])
-    category = QuerySelectField('Category', query_factory=categories,
+    body = TextAreaField('Сообщение', validators=[validators.InputRequired()])
+    category = QuerySelectField('Категория', query_factory=categories,
         allow_blank=True)
-    new_category = StringField('New Category')
+    new_category = StringField('Новая категория')
