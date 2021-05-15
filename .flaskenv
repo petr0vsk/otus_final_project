@@ -7,4 +7,4 @@ DB_HOST=localhost
 DATABASE_NAME=forum
 MYSQL_ROOT_PASSWORD=34times34
 BLOG_NAME='OTUS Blog'
-BLOG_POST_IMAGES_PATH='/root/WorkPython/Flask/otus_project/images'
+BLOG_POST_IMAGES_PATH='/root/WorkPython/Flask/otus_project/static/images/uploads'

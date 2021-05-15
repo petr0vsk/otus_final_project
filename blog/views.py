@@ -30,6 +30,7 @@ def post():
     form = PostForm()
 
     if form.validate_on_submit():
+        image_id = None
 
         # картинка
         if form.image.data:
