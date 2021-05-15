@@ -1,11 +1,16 @@
-from flask import Blueprint, render_template, session, flash, redirect, url_for, request
+from flask import Blueprint, render_template, session, flash, redirect, url_for, request, redirect
 from slugify import slugify
+import uuid
+import os
+from PIL import Image
 
 from application import db
 from blog.models import Post, Category
 from blog.forms import PostForm
 from author.models import Author
 from author.decorators import login_required
+from settings import BLOG_POST_IMAGES_PATH
+
 
 blog_app = Blueprint('blog_app', __name__)
 
@@ -25,6 +30,20 @@ def post():
     form = PostForm()
 
     if form.validate_on_submit():
+
+        # картинка
+        if form.image.data:
+            f = form.image.data
+            image_id = str(uuid.uuid4())
+            file_name = image_id + '.png'
+            file_path = os.path.join(
+                BLOG_POST_IMAGES_PATH, file_name
+            )
+            Image.open(f).save(file_path)
+            # приведем изображение к рамзеру 600 на 300 pix
+            _image_resize(BLOG_POST_IMAGES_PATH, image_id, 600, 'lg')
+            _image_resize(BLOG_POST_IMAGES_PATH, image_id, 300, 'sm')
+        # проверка есть ли искомая категория поста
         if form.new_category.data:
             new_category = Category(form.new_category.data)
             db.session.add(new_category)
@@ -32,7 +51,7 @@ def post():
             category = new_category
         else:
             category = form.category.data
-
+ 
         author = Author.query.get(session['id'])
         title = form.title.data.strip()
         body = form.body.data.strip()
@@ -40,6 +59,7 @@ def post():
             author=author,
             title=title,
             body=body,
+            image = image_id,
             category=category,
         )
 
@@ -59,3 +79,18 @@ def post():
 def article(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
     return render_template('blog/article.html', post=post)
+
+# сожмем картинку
+def _image_resize(original_file_path,image_id, image_base, extension):
+    file_path = os.path.join(
+        original_file_path, image_id + '.png'
+    )
+    image = Image.open(file_path)
+    wpercent = (image_base / float(image.size[0]))
+    hsize = int((float(image.size[1]) * float(wpercent)))
+    image = image.resize((image_base, hsize), Image.ANTIALIAS)
+    modified_file_path = os.path.join(
+        original_file_path, image_id + '.' + extension + '.png'
+    )
+    image.save(modified_file_path)
+    return    

@@ -8,7 +8,7 @@ class Post(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('author.id')) # ссылка на автора поста
     title = db.Column(db.String(80)) # название
     body = db.Column(db.Text)        # текст поста 
-    image = db.Column(db.String(36)) # строка с url на картинку
+    image = db.Column(db.String(36)) # строка с hash на картинку
     slug = db.Column(db.String(255), unique=True)  
     publish_date = db.Column(db.DateTime) # таймтстамп поста
     live = db.Column(db.Boolean)     # видимость поста--удаление поста
@@ -24,6 +24,7 @@ class Post(db.Model):
         self.author_id = author.id
         self.title = title
         self.body = body
+        self.image = image
         if category:
             self.category_id = category.id
         self.image = image
