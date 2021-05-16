@@ -10,13 +10,27 @@
 
     <div class="offset-md-2 col-md-8">
 
-        <h3>Новое сообщение</h3>
+        {% if action=="new" %}
+            <h3>Создать новое сообщение</h3>
+        {% else %}
+            <h3>Редактировать сообщение</h3>
+        {% endif %}
 
+        <h3>Новое сообщение</h3>
+        
         {% from "_formhelpers.html" import render_field %}
 
-        <form method="POST" action="{{ url_for('blog_app.post') }}" enctype="multipart/form-data" role="form">
+        {% if action=="new" %}
+        <form method="POST" action="{{ url_for('.post') }}" enctype="multipart/form-data" role="form">
+        {% else %}
+        <form method="POST" action="{{ url_for('.edit', slug=post.slug) }}" enctype="multipart/form-data" role="form">
+        {% endif %}
 
             {{ form.hidden_tag() }}
+
+            {% if post and post.image %}
+            <img src="{{ url_for('static', filename='images/uploads/' + post.image + '.sm.png') }}" class="img-thumbnail" />
+            {% endif %}  
 
             {{  render_field(form.image, class='form-control') }} <!-- картинка  --> 
             {{ render_field(form.title, class='form-control') }}
@@ -24,7 +38,11 @@
             {{ render_field(form.category, class='form-control') }}
             {{ render_field(form.new_category, class='form-control') }}
 
+            {% if action=="new" %}
             <button type="submit" class="btn btn-primary">Создать</button>
+            {% else %}
+            <button type="submit" class="btn btn-primary">Обновить</button>
+            {% endif %}
 
         </form>
 
