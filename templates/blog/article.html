@@ -26,8 +26,13 @@
         <div class="text-muted">
             Опубликовано {{ post.author.full_name }} --> {{ post.publish_date.strftime('%Y-%m-%d') }}
             {% if post.category %}
-            in {{ post.category.name }}
+            in <a href="{{ url_for('.categories', category_id=post.category.id )}}">
+                {{ post.category.name }}
             {% endif %}
+            &nbsp;[{% for tag in post.tags %}
+            <a href="{{ url_for('.tags', tag=tag.name )}}">
+                {{ tag }}</a>{% if not loop.last %},{% endif %}
+            {% endfor %}]     
             {% if session.id %}
             - <a href="{{ url_for('.edit', slug=post.slug) }}">Редактировать</a>
             - <a href="{{ url_for('.delete', slug=post.slug) }}">Удалить</a>
