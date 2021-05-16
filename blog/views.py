@@ -5,7 +5,7 @@ import os
 from PIL import Image
 
 from application import db
-from blog.models import Post, Category
+from blog.models import Post, Category, Tag
 from blog.forms import PostForm
 from author.models import Author
 from author.decorators import login_required
@@ -28,6 +28,7 @@ def index():
 @login_required
 def post():
     form = PostForm()
+    tags_field = request.values.get('tags_field', '')
 
     if form.validate_on_submit():
         image_id = None
@@ -64,6 +65,8 @@ def post():
             category=category,
         )
 
+        _save_tags(post, tags_field)
+
         db.session.add(post)
         db.session.commit()
 
@@ -74,7 +77,10 @@ def post():
         flash('Article posted')
         return redirect(url_for('.article', slug=slug))
 
-    return render_template('blog/post.html', form=form, action="new")#action for editing    
+    return render_template('blog/post.html', form=form, 
+                                             action="new", 
+                                             tags_field=tags_field
+                )  #action for editing    
 
 @blog_app.route('/posts/<slug>')
 def article(slug):
@@ -177,3 +183,19 @@ def _image_resize(original_file_path,image_id, image_base, extension):
     )
     image.save(modified_file_path)
     return    
+
+def _save_tags(post, tags_field):
+    post.tags.clear()
+    for tag_item in tags_field.split(','):
+        tag = Tag.query.filter_by(name=slugify(tag_item)).first()
+        if not tag:
+            tag = Tag(name=slugify(tag_item))
+            db.session.add(tag)
+        post.tags.append(tag)
+    return post
+
+def _load_tags_field(post):
+    tags_field = ''
+    for tag in post.tags:
+        tags_field += tag.name + ', '
+    return tags_field[:-2]    

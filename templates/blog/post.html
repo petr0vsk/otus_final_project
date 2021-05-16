@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Blog Post{% endblock %}
+{% block title %}Новое сообщение{% endblock %}
 
 {% block nav %}{% include 'navbar.html' %}{% endblock %}
 
@@ -37,6 +37,11 @@
             {{ render_field(form.body, class='form-control', rows=10) }}
             {{ render_field(form.category, class='form-control') }}
             {{ render_field(form.new_category, class='form-control') }}
+
+            <div class="form-group">
+                <label for="tags_field">Tags</label>
+                <input class="form-control" id="tags_field" name="tags_field" type="text" value="{{ tags_field }}">
+            </div>
 
             {% if action=="new" %}
             <button type="submit" class="btn btn-primary">Создать</button>
