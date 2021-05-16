@@ -24,9 +24,13 @@
 
         <hr />
         <div class="text-muted">
-            Posted by {{ post.author.full_name }} on {{ post.publish_date.strftime('%Y-%m-%d') }}
+            Опубликовано {{ post.author.full_name }} --> {{ post.publish_date.strftime('%Y-%m-%d') }}
             {% if post.category %}
             in {{ post.category.name }}
+            {% endif %}
+            {% if session.id %}
+            - <a href="{{ url_for('.edit', slug=post.slug) }}">Редактировать</a>
+            - <a href="{{ url_for('.delete', slug=post.slug) }}">Удалить</a>
             {% endif %}
 
         </div>
