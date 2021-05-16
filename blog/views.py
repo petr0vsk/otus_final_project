@@ -74,7 +74,7 @@ def post():
         post.slug = slug
         db.session.commit()
 
-        flash('Article posted')
+        flash('Сообщение опубликовано')
         return redirect(url_for('.article', slug=slug))
 
     return render_template('blog/post.html', form=form, 
@@ -92,6 +92,7 @@ def article(slug):
 def edit(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
     form = PostForm(obj=post)
+    tags_field = request.values.get('tags_field', _load_tags_field(post))
 
     if form.validate_on_submit():
         original_image = post.image
@@ -123,14 +124,16 @@ def edit(slug):
         if form.title.data != original_title:
             post.slug = slugify(str(post.id) + '-' + form.title.data)
 
+        _save_tags(post, tags_field)    
         db.session.commit()
-        flash('Article edited')
+        flash('Сообщение отредактировано')
         return redirect(url_for('.article', slug=post.slug))
 
     return render_template('blog/post.html',
         form=form,
         post=post,
-        action="edit"
+        action="edit",
+        tags_field = tags_field
     )
 
 @blog_app.route('/delete/<slug>')
@@ -139,7 +142,7 @@ def delete(slug):
     post = Post.query.filter_by(slug=slug).first_or_404()
     post.live = False
     db.session.commit()
-    flash("Article deleted")
+    flash("Сообщение удалено")
     return redirect(url_for('.index'))
 
 @blog_app.route('/categories/<category_id>') # вывод по категории
